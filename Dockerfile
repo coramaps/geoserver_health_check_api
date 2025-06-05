@@ -27,15 +27,7 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 RUN apt-get update && apt-get -y install cron nano && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN touch /var/log/insert_prediction_cron.log
 
 WORKDIR /app
 
-COPY api ./api
-COPY script ./script
-COPY cronjob ./cronjob
-
-#LOGS /var/log/insert_prediction_cron.log
-RUN crontab ./script/insert_prediction
-
-CMD bash -c 'service cron start; python3 -m uvicorn api.main:api --host 0.0.0.0 --root-path /sugarcane --log-level=debug --workers=8'
+CMD bash -c 'python3 -m uvicorn api.main:app --host 0.0.0.0 --log-level=debug --workers=8'

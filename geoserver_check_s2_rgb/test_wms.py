@@ -1,11 +1,11 @@
 import io
 import os
-import sys
+# import sys
 
 import numpy as np
 from scipy.stats import pearsonr
 
-sys.path.append(os.getcwd())
+# sys.path.append(os.getcwd())
 from affine import Affine
 
 from geoserver_check_s2_rgb.get_latest_stac_images import stacSearch   
@@ -46,7 +46,7 @@ def fetch_wms_image(bbox,start,  wms_url, layer, end=None,dst_crs="EPSG:4326",
         # + "timeDimensionExtent="+ts
         + "TIME="+ts
     )
-    print("geoserver url: \n"+url)
+    # print("geoserver url: \n"+url)
     # Make a GET request to the WMS server
     response = requests.get(url)
     
@@ -106,7 +106,7 @@ def get_least_cloudiest_image_for_region_and_timespan(wgs84_bounds, timespan):
         geometry=[shapely.geometry.box(*wgs84_bounds)],
         crs=boundscrs,
     ).to_crs("EPSG:4326")
-    os.makedirs(out_dir, exist_ok=True)
+    # os.makedirs(out_dir, exist_ok=True)
     # df.to_file(f"{out_dir}/aoi.geojson", driver="GeoJSON")
     
     res=stacSearch(df.unary_union,*timespan)
@@ -210,7 +210,7 @@ def test_least_cloudiest_rgb_image_for_region_and_timespan(wgs84_bounds, timespa
     
     corr,p=pearsonr(d1[0,ind].flatten(), d2[0, ind].flatten())
     
-    return corr, p, np.sum(ind)
+    return float(corr), float(p), int(np.sum(ind))
     
     
     

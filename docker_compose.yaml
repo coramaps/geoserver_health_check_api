@@ -1,0 +1,17 @@
+networks:
+  api-frontend:
+    name: api-frontend
+
+services:
+
+  fastapi:
+    build: .
+    container_name: health_check_api
+    restart: unless-stopped
+    ports:
+    - 8009:8000
+    # env_file:
+    #   - prod.env
+    networks:
+      - api-frontend
+    
